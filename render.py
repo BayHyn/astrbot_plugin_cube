@@ -1,102 +1,49 @@
 from PIL import Image, ImageDraw
 import io
 
+
 class DrawCube:
-    def __init__(self, newmf):
-        self.lst = [newmf[4], newmf[2], newmf[0], newmf[3], newmf[1], newmf[5]]
+    def __init__(self):
         self.face_id = [[0, 1], [1, 0], [1, 1], [1, 2], [1, 3], [2, 1]]
         self.color = {
-            1: "red",
-            2: "red",
-            3: "red",
-            4: "red",
-            5: "red",
-            6: "red",
-            7: "red",
-            8: "red",
-            9: "red",
-            10: "blue",
-            11: "blue",
-            12: "blue",
-            13: "blue",
-            14: "blue",
-            15: "blue",
-            16: "blue",
-            17: "blue",
-            18: "blue",
-            19: "yellow",
-            20: "yellow",
-            21: "yellow",
-            22: "yellow",
-            23: "yellow",
-            24: "yellow",
-            25: "yellow",
-            26: "yellow",
-            27: "yellow",
-            28: "orange",
-            29: "orange",
-            30: "orange",
-            31: "orange",
-            32: "orange",
-            33: "orange",
-            34: "orange",
-            35: "orange",
-            36: "orange",
-            37: "green",
-            38: "green",
-            39: "green",
-            40: "green",
-            41: "green",
-            42: "green",
-            43: "green",
-            44: "green",
-            45: "green",
-            46: "white",
-            47: "white",
-            48: "white",
-            49: "white",
-            50: "white",
-            51: "white",
-            52: "white",
-            53: "white",
-            54: "white",
+            **dict.fromkeys(range(1, 10), "red"),
+            **dict.fromkeys(range(10, 19), "blue"),
+            **dict.fromkeys(range(19, 28), "yellow"),
+            **dict.fromkeys(range(28, 37), "orange"),
+            **dict.fromkeys(range(37, 46), "green"),
+            **dict.fromkeys(range(46, 55), "white"),
         }
+
+    def _clear_image(self):
         self.img = Image.new("RGB", (525, 275), color="black")
 
     def _draw(self, dx, dy, arr):
         drawer = ImageDraw.Draw(self.img)
-        dx = dx * 100
-        dy = dy * 100
-        cons, conty = 25, 0
-        for i in arr:
-            contx = 0
-            for j in i:
+        dx *= 100
+        dy *= 100
+        cons = 25
+        for conty, row in enumerate(arr):
+            for contx, j in enumerate(row):
                 posx = contx * cons + dx
                 posy = conty * cons + dy
                 drawer.rectangle((posx, posy, posx + 20, posy + 20), fill=self.color[j])
-                contx += 1
-            conty += 1
 
-    def _draw_all_cube(self):
-        for i in range(len(self.lst)):
-            self._draw(self.face_id[i][1], self.face_id[i][0], self.lst[i])
+    def _draw_all_cube(self, lst):
+        for i in range(len(lst)):
+            self._draw(self.face_id[i][1], self.face_id[i][0], lst[i])
 
-    def _prjctn(self):
-        #     画投影图
+    def _prjctn(self, lst):
         draw = ImageDraw.Draw(self.img)
-        dx, dy, cons, conty = 400, 100, 25, 0
-        for i in self.lst[2]:
-            contx = 0
-            for j in i:
+        dx, dy, cons = 400, 100, 25
+        for conty, row in enumerate(lst[2]):
+            for contx, j in enumerate(row):
                 posx = contx * cons + dx
                 posy = conty * cons + dy
                 draw.rectangle((posx, posy, posx + 20, posy + 20), fill=self.color[j])
-                contx += 1
-            conty += 1
-        dx = 470
-        dy = 84
-        for i in self.lst[0][::-1]:
-            for j in i[::-1]:
+
+        dx, dy = 470, 84
+        for row in lst[0][::-1]:
+            for j in row[::-1]:
                 draw.polygon(
                     [
                         (11 + dx, 0 + dy),
@@ -109,10 +56,10 @@ class DrawCube:
                 dx -= 25
             dy -= 14
             dx += 91
-        dx = 474
-        dy = 87
-        for i in self.lst[3]:
-            for j in i:
+
+        dx, dy = 474, 87
+        for row in lst[3]:
+            for j in row:
                 draw.polygon(
                     [
                         (11 + dx, 0 + dy),
@@ -127,12 +74,16 @@ class DrawCube:
             dx = 474
             dy += 64.5
 
-    def get_buf(self) ->  bytes:
-        self._draw_all_cube()
-        self._prjctn()
-        image = self.img
+    def draw(self, newmf) -> bytes:
+        """
+        渲染图像并返回字节内容
+        :param newmf: 魔方六面数据列表，格式为 [U, R, F, D, L, B]
+        :return: PNG 格式图像字节
+        """
+        self._clear_image()
+        lst = [newmf[4], newmf[2], newmf[0], newmf[3], newmf[1], newmf[5]]  # 按需重排面
+        self._draw_all_cube(lst)
+        self._prjctn(lst)
         buf = io.BytesIO()
-        image.save(buf, format="png")
+        self.img.save(buf, format="PNG")
         return buf.getvalue()
-
-

@@ -16,7 +16,7 @@ _✨ [astrbot](https://github.com/AstrBotDevs/AstrBot) 魔方插件 ✨_
 
 ## 🤝 介绍
 
-魔方插件
+魔方插件，支持三阶魔方，可多人参与
 
 ## 📦 安装
 
@@ -35,17 +35,28 @@ git clone https://github.com/Zhalslar/astrbot_plugin_cube
 
 ### 命令表
 
-| 方法   | 命令          |
-|------|-------------|
-| /魔方 xxx  | 生成本群的魔方，/魔方可换成/cube 或 /cb，xxx为要输入的操作，详细操作详见[还没写好] |
-| /打乱魔方 | 打乱当前群聊的魔方         |
-| /还原魔方 | 还原当前群聊的魔方         |
-| /撤销操作 | 撤销上一步操作         |
-| /魔方排行榜 |  显示各个群的魔方排行榜（没完善）  |
+|     命令  | 简化命令 |  描述  |
+|------|-------------|--------|
+| /魔方     | /cb   | 初始化本群的魔方 |
+| /魔方 <操作符> | /cb xxx   | 操作魔方，操作符详见下文 |
+| /打乱魔方 | /cbk  | 打乱当前群聊的魔方         |
+| /还原魔方 | /cbr  | 还原当前群聊的魔方         |
+| /撤销操作 | /cbb  | 撤销上一步操作         |
 
-### 示例
+### 操作符
 
-`/cb  ['F', 'f', 'B', 'b', 'L', 'l', 'R', 'r', 'U', 'u', 'D', 'd']`
+| 操作符 | 描述 |
+|----------|---------|
+| F、f | 转动正面（forword）  |
+| B、b | 转动背面（back）  |
+| L、l | 转动左面（left）  |
+| R、r | 转动右面（right）  |
+| U、u | 转动上面（up） |
+| D、d | 转动下面（down）  |
+
+- 说明：大小写的转动方向相反
+
+- 示例：`/cb FfBbLlRrUuDd`(可组合操作符形成公式)
 
 ## 👥 贡献指南
 
@@ -58,6 +69,6 @@ git clone https://github.com/Zhalslar/astrbot_plugin_cube
 
 - 想第一时间得到反馈的可以来作者的插件反馈群（QQ群）：460973561（不点star不给进）
 
-## 鸣谢
+## 🤝 鸣谢
 
-[nonebot-plugin-cube](https://github.com/initialencounter/cube/blob/main/nonebot-plugin-cube), QQ群:399899914
+[nonebot-plugin-cube](https://github.com/initialencounter/cube/blob/main/nonebot-plugin-cube)
