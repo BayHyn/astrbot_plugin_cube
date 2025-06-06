@@ -45,7 +45,7 @@ git clone https://github.com/Zhalslar/astrbot_plugin_cube
 
 ### 示例
 
-`/cb  ['F', 'f', 'B', 'b', 'L', 'l', 'R', 'r', 'U', 'u', 'D', 'd']`
+`/cb  FfBbLlRrUuDd`
 
 ## 👥 贡献指南
 
