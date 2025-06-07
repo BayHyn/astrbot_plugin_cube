@@ -67,8 +67,9 @@ git clone https://github.com/Zhalslar/astrbot_plugin_cube
 
 ## 📌 注意事项
 
-- 想第一时间得到反馈的可以来作者的插件反馈群（QQ群）：460973561（不点star不给进）
+- 想第一时间得到反馈的可以来插件反馈群（QQ群）：460973561（不点star不给进）
 
 ## 🤝 鸣谢
 
-[nonebot-plugin-cube](https://github.com/initialencounter/cube/blob/main/nonebot-plugin-cube)
+本插件的的核心代码来源于：
+[https://github.com/initialencounter/cube](https://github.com/initialencounter/cube)
