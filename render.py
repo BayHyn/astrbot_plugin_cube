@@ -1,21 +1,55 @@
-from PIL import Image, ImageDraw
+from PIL import Image, ImageDraw, ImageColor
 import io
 
 
 class DrawCube:
-    def __init__(self):
+    def __init__(self, colors=None, bg_color=None):
+        """
+        初始化魔方渲染器，允许传入自定义的6面颜色。
+        :param colors: 一个包含6个元素的颜色列表，对应魔方6个面 [前, 后, 左, 右, 上, 下]
+        """
         self.face_id = [[0, 1], [1, 0], [1, 1], [1, 2], [1, 3], [2, 1]]
-        self.color = {
-            **dict.fromkeys(range(1, 10), "red"),
-            **dict.fromkeys(range(10, 19), "blue"),
-            **dict.fromkeys(range(19, 28), "yellow"),
-            **dict.fromkeys(range(28, 37), "orange"),
-            **dict.fromkeys(range(37, 46), "green"),
-            **dict.fromkeys(range(46, 55), "white"),
-        }
+        self.default_colors = ["green", "blue", "red", "orange", "yellow", "white"]
+        self.colors = self.initialize_colors(colors)
+        self.bg_color = bg_color if self._valid_color(bg_color) else "black"
+
+    def initialize_colors(self, colors=None):
+        """初始化颜色列表，检查是否有效并返回正确的颜色映射"""
+        if not colors or len(colors) != 6:
+            colors = self.default_colors
+
+        color_mapping = {}
+        used_colors = set(colors)
+        for i, color in enumerate(colors):
+            valid_color = (
+                colors[i]
+                if self._valid_color(color)
+                else self._get_unused_color(used_colors)
+            )
+            used_colors |= {valid_color}
+            color_mapping.update(
+                dict.fromkeys(range(i * 9 + 1, (i + 1) * 9 + 1), valid_color)
+            )
+
+        return color_mapping
+
+    def _valid_color(self, color) -> bool:
+        """检查颜色有效性"""
+        try:
+            ImageColor.getrgb(color)
+            return True
+        except ValueError:
+            return False
+
+    def _get_unused_color(self, used_colors:set):
+        """获取未使用的默认颜色, 若无则返回第一个默认颜色"""
+        for color in self.default_colors:
+            if color not in used_colors:
+                return color
+        return self.default_colors[0]
 
     def _clear_image(self):
-        self.img = Image.new("RGB", (525, 275), color="black")
+        self.img = Image.new("RGB", (525, 275), color=self.bg_color)
 
     def _draw(self, dx, dy, arr):
         drawer = ImageDraw.Draw(self.img)
@@ -26,7 +60,7 @@ class DrawCube:
             for contx, j in enumerate(row):
                 posx = contx * cons + dx
                 posy = conty * cons + dy
-                drawer.rectangle((posx, posy, posx + 20, posy + 20), fill=self.color[j])
+                drawer.rectangle((posx, posy, posx + 20, posy + 20), fill=self.colors[j])
 
     def _draw_all_cube(self, lst):
         for i in range(len(lst)):
@@ -39,7 +73,7 @@ class DrawCube:
             for contx, j in enumerate(row):
                 posx = contx * cons + dx
                 posy = conty * cons + dy
-                draw.rectangle((posx, posy, posx + 20, posy + 20), fill=self.color[j])
+                draw.rectangle((posx, posy, posx + 20, posy + 20), fill=self.colors[j])
 
         dx, dy = 470, 84
         for row in lst[0][::-1]:
@@ -51,7 +85,7 @@ class DrawCube:
                         (-20 + dx, 11 + dy),
                         (0 + dx, 11 + dy),
                     ],
-                    fill=self.color[j],
+                    fill=self.colors[j],
                 )
                 dx -= 25
             dy -= 14
@@ -67,7 +101,7 @@ class DrawCube:
                         (0 + dx, 31 + dy),
                         (11 + dx, 20 + dy),
                     ],
-                    fill=self.color[j],
+                    fill=self.colors[j],
                 )
                 dx += 16
                 dy -= 13

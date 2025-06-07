@@ -42,6 +42,10 @@ git clone https://github.com/Zhalslar/astrbot_plugin_cube
 | /打乱魔方 | /cbk  | 打乱当前群聊的魔方         |
 | /还原魔方 | /cbr  | 还原当前群聊的魔方         |
 | /撤销操作 | /cbb  | 撤销上一步操作         |
+| /添加公式 | /cba  | 添加魔方公式         |
+| /删除公式 | /cbd  | 添加魔方公式         |
+| /公式列表 | /cbl  | 查看存储的魔方公式    |
+| /魔方帮助 | /cbh  | 查看魔方帮助         |
 
 ### 操作符
 
@@ -54,7 +58,7 @@ git clone https://github.com/Zhalslar/astrbot_plugin_cube
 | U、u | 转动上面（up） |
 | D、d | 转动下面（down）  |
 
-- 说明：大小写的转动方向相反
+- 大小写区别：大写为顺时针转动，小写为逆时针转动
 
 - 示例：`/cb FfBbLlRrUuDd`(可组合操作符形成公式)
 
